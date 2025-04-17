@@ -1,28 +1,27 @@
 // lib/presentation/providers/auth_provider.dart
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supplierconnectapp/core/constants/app_strings.dart';
 import 'package:supplierconnectapp/data/models/supplier_models.dart';
 import 'package:supplierconnectapp/domain/usecase/get_suppliers_usecase.dart';
 import 'package:supplierconnectapp/domain/usecase/login_usecase.dart';
 import '../../data/models/login_model.dart';
 
+
 class AuthProvider with ChangeNotifier {
   final LoginUseCase loginUseCase;
-    final GetSuppliersUseCase getSuppliersUseCase;
-
+  final GetSuppliersUseCase getSuppliersUseCase;
   bool _isLoading = false;
   String? _errorMessage;
   LoginModel? _loginModel;
-    List<SupplierModel> _suppliers = [];
-
+  List<SupplierModel> _suppliers = [];
 
   AuthProvider(this.loginUseCase, this.getSuppliersUseCase);
 
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
   LoginModel? get loginModel => _loginModel;
-    List<SupplierModel> get suppliers => _suppliers;
-
+  List<SupplierModel> get suppliers => _suppliers;
 
   Future<void> login(String username, String password) async {
     _isLoading = true;
@@ -31,6 +30,9 @@ class AuthProvider with ChangeNotifier {
 
     try {
       _loginModel = await loginUseCase.execute(username, password);
+      // Save token to shared preferences
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('token', _loginModel!.token);
     } catch (e) {
       _errorMessage = AppStrings.loginError;
     } finally {
@@ -38,7 +40,7 @@ class AuthProvider with ChangeNotifier {
       notifyListeners();
     }
   }
-  
+
   Future<void> fetchSuppliers() async {
     _isLoading = true;
     notifyListeners();
@@ -51,5 +53,24 @@ class AuthProvider with ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  Future<bool> isLoggedIn() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    if (token != null) {
+      _loginModel = LoginModel(token: token);
+      return true;
+    }
+    return false;
+  }
+
+  Future<void> logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('token');
+    _loginModel = null;
+    _suppliers = [];
+    _errorMessage = null;
+    notifyListeners();
   }
 }

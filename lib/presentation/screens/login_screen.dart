@@ -26,8 +26,7 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  void _showSnackBar(
-      BuildContext context, String message, ContentType contentType) {
+  void _showSnackBar(BuildContext context, String message, ContentType contentType) {
     final snackBar = SnackBar(
       elevation: 0,
       behavior: SnackBarBehavior.floating,
@@ -57,7 +56,6 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // App Logo/Title
                   Text(
                     AppStrings.appName,
                     style: TextStyle(
@@ -67,8 +65,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   const SizedBox(height: 48),
-
-                  // Username Field
                   TextFormField(
                     controller: _usernameController,
                     decoration: InputDecoration(
@@ -81,15 +77,13 @@ class _LoginScreenState extends State<LoginScreen> {
                       fillColor: Colors.white,
                     ),
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
+ if (value == null || value.isEmpty) {
                         return 'Please enter username';
                       }
                       return null;
                     },
                   ),
                   const SizedBox(height: 16),
-
-                  // Password Field
                   TextFormField(
                     controller: _passwordController,
                     obscureText: true,
@@ -110,30 +104,31 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                   ),
                   const SizedBox(height: 24),
-
-                  // Login Button
                   Consumer<AuthProvider>(
                     builder: (context, authProvider, _) {
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        if (authProvider.errorMessage != null) {
+                      if (authProvider.errorMessage != null) {
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
                           _showSnackBar(
                             context,
                             authProvider.errorMessage!,
                             ContentType.failure,
                           );
-                        } else if (authProvider.loginModel != null) {
+                        });
+                      } else if (authProvider.loginModel != null) {
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
                           _showSnackBar(
                             context,
                             AppStrings.loginSuccess,
                             ContentType.success,
-                          );   Navigator.pushReplacement(
+                          );
+                          Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                               builder: (context) => const SupplierListScreen(),
                             ),
                           );
-                        }
-                      });
+                        });
+                      }
 
                       return SizedBox(
                         width: double.infinity,

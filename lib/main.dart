@@ -5,8 +5,9 @@ import 'package:supplierconnectapp/data/repository/auth_repository.dart';
 import 'package:supplierconnectapp/domain/usecase/get_suppliers_usecase.dart';
 import 'package:supplierconnectapp/domain/usecase/login_usecase.dart';
 import 'package:supplierconnectapp/presentation/provider/auth_provider.dart';
+import 'package:supplierconnectapp/presentation/screens/splashscreen.dart';
 
-import 'presentation/screens/login_screen.dart';
+
 
 void main() {
   runApp(const SupplierConnectApp());
@@ -26,8 +27,7 @@ class SupplierConnectApp extends StatelessWidget {
           create: (context) => LoginUseCase(context.read<AuthRepository>()),
         ),
         Provider<GetSuppliersUseCase>(
-          create: (context) =>
-              GetSuppliersUseCase(context.read<AuthRepository>()),
+          create: (context) => GetSuppliersUseCase(context.read<AuthRepository>()),
         ),
         ChangeNotifierProvider<AuthProvider>(
           create: (context) => AuthProvider(
@@ -36,14 +36,13 @@ class SupplierConnectApp extends StatelessWidget {
           ),
         ),
       ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
+      child: MaterialApp(debugShowCheckedModeBanner: false,
         title: 'Supplier Connect',
         theme: ThemeData(
           primarySwatch: Colors.green,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: const LoginScreen(),
+        home: const SplashScreen(),
       ),
     );
   }

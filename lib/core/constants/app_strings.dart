@@ -7,8 +7,7 @@ class AppStrings {
   static const loginButton = 'Sign In';
   static const loginError = 'Invalid credentials. Please try again.';
   static const loginSuccess = 'Login successful!';
-   static const suppliersTitle = 'Suppliers';
-  static const suppliersError = 'Failed to load suppliers.';
-    static const noSuppliers = 'No suppliers found';
-
+  static const suppliersTitle = 'Suppliers';
+  static const noSuppliers = 'No suppliers found';
+  static const logout = 'Logout';
 }

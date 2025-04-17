@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:supplierconnectapp/presentation/provider/auth_provider.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_strings.dart';
+import 'login_screen.dart';
 
 class SupplierListScreen extends StatefulWidget {
   const SupplierListScreen({Key? key}) : super(key: key);
@@ -16,7 +17,6 @@ class _SupplierListScreenState extends State<SupplierListScreen> {
   @override
   void initState() {
     super.initState();
-    // Fetch suppliers when the screen is initialized
     Provider.of<AuthProvider>(context, listen: false).fetchSuppliers();
   }
 
@@ -27,6 +27,19 @@ class _SupplierListScreenState extends State<SupplierListScreen> {
       appBar: AppBar(
         title: const Text(AppStrings.suppliersTitle),
         backgroundColor: AppColors.primary,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () async {
+              await Provider.of<AuthProvider>(context, listen: false).logout();
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const LoginScreen()),
+              );
+            },
+            tooltip: AppStrings.logout,
+          ),
+        ],
       ),
       body: Consumer<AuthProvider>(
         builder: (context, authProvider, _) {
