@@ -1,13 +1,10 @@
-// lib/main.dart
+// File: lib/main.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:supplierconnectapp/data/repository/auth_repository.dart';
-import 'package:supplierconnectapp/domain/usecase/get_suppliers_usecase.dart';
-import 'package:supplierconnectapp/domain/usecase/login_usecase.dart';
-import 'package:supplierconnectapp/presentation/provider/auth_provider.dart';
-import 'package:supplierconnectapp/presentation/screens/splashscreen.dart';
-
-
+import 'package:supplierconnectapp/view/login_view.dart';
+import 'package:supplierconnectapp/view/supplier_listscreen.dart';
+import 'package:supplierconnectapp/viewmodel/login_viewmodel.dart';
+import 'package:supplierconnectapp/viewmodel/supplier_viewmodel.dart';
 
 void main() {
   runApp(const SupplierConnectApp());
@@ -20,29 +17,22 @@ class SupplierConnectApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider<AuthRepository>(
-          create: (_) => AuthRepository(),
-        ),
-        Provider<LoginUseCase>(
-          create: (context) => LoginUseCase(context.read<AuthRepository>()),
-        ),
-        Provider<GetSuppliersUseCase>(
-          create: (context) => GetSuppliersUseCase(context.read<AuthRepository>()),
-        ),
-        ChangeNotifierProvider<AuthProvider>(
-          create: (context) => AuthProvider(
-            context.read<LoginUseCase>(),
-            context.read<GetSuppliersUseCase>(),
-          ),
-        ),
+        ChangeNotifierProvider(create: (_) => LoginViewModel()),
+        ChangeNotifierProvider(create: (_) => SupplierViewModel()),
+        
       ],
-      child: MaterialApp(debugShowCheckedModeBanner: false,
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Supplier Connect',
         theme: ThemeData(
-          primarySwatch: Colors.green,
+          primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: const SplashScreen(),
+        initialRoute: '/',
+        routes: {
+          '/': (context) => const LoginScreen(),
+          '/suppliers': (context) => const SupplierListScreen(),
+        },
       ),
     );
   }

@@ -1,5 +1,7 @@
-// lib/data/models/login_model.dart
-// (Using the provided LoginModel)
+// To parse this JSON data, do
+//
+//     final loginModel = loginModelFromJson(jsonString);
+
 import 'dart:convert';
 
 LoginModel loginModelFromJson(String str) => LoginModel.fromJson(json.decode(str));
