@@ -22,7 +22,7 @@ class SupplierDetailScreen extends StatelessWidget {
           ),
         ),
         title: const Text(
-          'Supplier Details',
+          'Supplier Food Details',
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: Colors.blue.shade900,
@@ -95,6 +95,22 @@ class SupplierDetailScreen extends StatelessWidget {
                               color: Colors.grey,
                               fontSize: 16,
                             ),
+                          ),
+                          trailing: IconButton(
+                            icon: const Icon(
+                              Icons.add_shopping_cart,
+                              color: Colors.blue,
+                            ),
+                            onPressed: () {
+                              // Handle add to cart action
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content:
+                                      Text('${product.name} added to cart'),
+                                  duration: const Duration(seconds: 2),
+                                ),
+                              );
+                            },
                           ),
                         ),
                       );
