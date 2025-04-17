@@ -1,5 +1,5 @@
-// File: lib/viewmodels/login_viewmodel.dart
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supplierconnectapp/service/api_service.dart';
 
 class LoginViewModel extends ChangeNotifier {
@@ -10,11 +10,9 @@ class LoginViewModel extends ChangeNotifier {
 
   bool _isLoading = false;
   String _errorMessage = '';
-  String _token = '';
 
   bool get isLoading => _isLoading;
   String get errorMessage => _errorMessage;
-  String get token => _token;
 
   Future<void> login(BuildContext context) async {
     _isLoading = true;
@@ -27,7 +25,10 @@ class LoginViewModel extends ChangeNotifier {
         passwordController.text,
       );
 
-      _token = loginModel.token;
+      // Save the token using shared_preferences
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('token', loginModel.token);
+      print('Stored token: ${loginModel.token}'); // Debug print
 
       // Show success snackbar
       ScaffoldMessenger.of(context).showSnackBar(
@@ -38,7 +39,7 @@ class LoginViewModel extends ChangeNotifier {
         ),
       );
 
-      // Navigate to supplier listar
+      // Navigate to supplier list
       Navigator.pushReplacementNamed(context, '/suppliers');
     } catch (e) {
       _errorMessage = e.toString();

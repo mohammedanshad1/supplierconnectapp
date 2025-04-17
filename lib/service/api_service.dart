@@ -1,4 +1,3 @@
-// File: lib/services/api_service.dart
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:supplierconnectapp/model/login_model.dart';
@@ -25,11 +24,12 @@ class ApiService {
   }
 
   Future<List<SupplierModel>> getSuppliers(String token) async {
+    print('Token being used: $token'); // Debug print
     final response = await http.get(
       Uri.parse('$_baseUrl/suppliers'),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
+        'Authorization': '$token',
       },
     );
     print(response.body);

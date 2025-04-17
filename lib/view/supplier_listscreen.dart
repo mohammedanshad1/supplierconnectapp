@@ -1,10 +1,23 @@
-// File: lib/views/supplier_list_screen.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:supplierconnectapp/viewmodel/supplier_viewmodel.dart';
- 
-class SupplierListScreen extends StatelessWidget {
+
+class SupplierListScreen extends StatefulWidget {
   const SupplierListScreen({Key? key}) : super(key: key);
+
+  @override
+  _SupplierListScreenState createState() => _SupplierListScreenState();
+}
+
+class _SupplierListScreenState extends State<SupplierListScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final viewModel = Provider.of<SupplierViewModel>(context, listen: false);
+      viewModel.fetchSuppliers();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
