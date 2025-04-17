@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:supplierconnectapp/view/login_view.dart';
+import 'package:supplierconnectapp/view/splash_view.dart';
 import 'package:supplierconnectapp/view/supplier_listscreen.dart';
 import 'package:supplierconnectapp/viewmodel/login_viewmodel.dart';
 import 'package:supplierconnectapp/viewmodel/supplier_viewmodel.dart';
@@ -19,7 +20,6 @@ class SupplierConnectApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => LoginViewModel()),
         ChangeNotifierProvider(create: (_) => SupplierViewModel()),
-        
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -30,7 +30,8 @@ class SupplierConnectApp extends StatelessWidget {
         ),
         initialRoute: '/',
         routes: {
-          '/': (context) => const LoginScreen(),
+          '/': (context) => const SplashScreen(),
+          '/login': (context) => const LoginScreen(),
           '/suppliers': (context) => const SupplierListScreen(),
         },
       ),
