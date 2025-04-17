@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:supplierconnectapp/model/login_model.dart';
+import 'package:supplierconnectapp/model/supplier_detail_model.dart';
 import 'package:supplierconnectapp/model/supplier_model.dart';
 
 class ApiService {
@@ -39,4 +40,20 @@ class ApiService {
       throw Exception('Failed to fetch suppliers: ${response.reasonPhrase}');
     }
   }
+  Future<SupplierDetailModel> getSupplierDetails(int supplierId, String token) async {
+  final response = await http.get(
+    Uri.parse('$_baseUrl/suppliers/$supplierId'),
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': '$token',
+    },
+  );
+
+  if (response.statusCode == 200) {
+    return supplierDetailModelFromJson(response.body);
+  } else {
+    throw Exception('Failed to fetch supplier details: ${response.reasonPhrase}');
+  }
+}
+
 }
