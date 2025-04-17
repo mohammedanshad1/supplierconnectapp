@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:supplierconnectapp/view/cart_view.dart';
 import 'package:supplierconnectapp/view/suppliers_details_view.dart';
 import 'package:supplierconnectapp/viewmodel/supplier_details_viewmodel.dart';
 import 'package:supplierconnectapp/viewmodel/supplier_viewmodel.dart';
@@ -12,6 +14,8 @@ class SupplierListScreen extends StatefulWidget {
 }
 
 class _SupplierListScreenState extends State<SupplierListScreen> {
+  int _selectedIndex = 0;
+
   @override
   void initState() {
     super.initState();
@@ -26,6 +30,22 @@ class _SupplierListScreenState extends State<SupplierListScreen> {
     await viewModel.fetchSuppliers();
   }
 
+  Future<void> _logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+    // Navigate to the login screen or perform any other logout action
+    Navigator.pushReplacementNamed(context, '/');
+  }
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+    if (index == 1) {
+      _logout();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<SupplierViewModel>(context);
@@ -38,6 +58,20 @@ class _SupplierListScreenState extends State<SupplierListScreen> {
         ),
         backgroundColor: Colors.blue.shade900,
         elevation: 0,
+        actions: [
+          IconButton(
+            icon: const Icon(
+              Icons.shopping_cart,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const CartScreen()),
+              );
+            },
+          ),
+        ],
       ),
       body: RefreshIndicator(
         onRefresh: _refreshSuppliers,
@@ -96,8 +130,10 @@ class _SupplierListScreenState extends State<SupplierListScreen> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => ChangeNotifierProvider(
-                                    create: (_) => SupplierDetailViewModel(supplierId: supplier.id),
-                                    child: SupplierDetailScreen(supplierId: supplier.id),
+                                    create: (_) => SupplierDetailViewModel(
+                                        supplierId: supplier.id),
+                                    child: SupplierDetailScreen(
+                                        supplierId: supplier.id),
                                   ),
                                 ),
                               );
@@ -107,6 +143,21 @@ class _SupplierListScreenState extends State<SupplierListScreen> {
                       );
                     },
                   ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.list),
+            label: 'Suppliers',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.logout),
+            label: 'Logout',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.blue.shade900,
+        onTap: _onItemTapped,
       ),
     );
   }

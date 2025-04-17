@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:supplierconnectapp/model/cart_model.dart';
+import 'package:supplierconnectapp/viewmodel/cart_viewmodel.dart';
 import 'package:supplierconnectapp/viewmodel/supplier_details_viewmodel.dart';
+
 
 class SupplierDetailScreen extends StatelessWidget {
   final int supplierId;
@@ -102,11 +105,16 @@ class SupplierDetailScreen extends StatelessWidget {
                               color: Colors.blue,
                             ),
                             onPressed: () {
-                              // Handle add to cart action
+                              final cartItem = CartItem(
+                                productId: product.id,
+                                productName: product.name,
+                                price: product.price,
+                              );
+                              Provider.of<CartViewModel>(context, listen: false)
+                                  .addToCart(cartItem);
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content:
-                                      Text('${product.name} added to cart'),
+                                  content: Text('${product.name} added to cart'),
                                   duration: const Duration(seconds: 2),
                                 ),
                               );

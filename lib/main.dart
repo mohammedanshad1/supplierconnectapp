@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:supplierconnectapp/view/login_view.dart';
 import 'package:supplierconnectapp/view/splash_view.dart';
 import 'package:supplierconnectapp/view/supplier_listscreen.dart';
+import 'package:supplierconnectapp/viewmodel/cart_viewmodel.dart';
 import 'package:supplierconnectapp/viewmodel/login_viewmodel.dart';
 import 'package:supplierconnectapp/viewmodel/supplier_viewmodel.dart';
 
@@ -20,6 +21,7 @@ class SupplierConnectApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => LoginViewModel()),
         ChangeNotifierProvider(create: (_) => SupplierViewModel()),
+        ChangeNotifierProvider(create: (_) => CartViewModel()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
