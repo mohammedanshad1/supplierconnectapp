@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:supplierconnectapp/view/order_success_Screen.dart';
 import 'package:supplierconnectapp/viewmodel/cart_viewmodel.dart';
 
 class CartScreen extends StatelessWidget {
@@ -107,6 +108,7 @@ class CartScreen extends StatelessWidget {
                           );
                         },
                         style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red,
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
@@ -114,23 +116,35 @@ class CartScreen extends StatelessWidget {
                         ),
                         child: const Text(
                           'Cancel',
-                          style: TextStyle(fontSize: 18),
+                          style: TextStyle(fontSize: 18, color: Colors.white),
                         ),
                       ),
                     ),
                     const SizedBox(width: 16),
                     Expanded(
                       child: ElevatedButton(
-                        onPressed: () {
-                          // Handle place order action
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Order placed'),
-                              duration: Duration(seconds: 2),
-                            ),
-                          );
+                        onPressed: () async {
+                          try {
+                            bool orderSuccess = await viewModel.placeOrder();
+                            if (orderSuccess) {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const OrderSuccessScreen()),
+                              );
+                            }
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Failed to place order: $e'),
+                                duration: const Duration(seconds: 2),
+                              ),
+                            );
+                          }
                         },
                         style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green,
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
@@ -138,7 +152,7 @@ class CartScreen extends StatelessWidget {
                         ),
                         child: const Text(
                           'Place Order',
-                          style: TextStyle(fontSize: 18),
+                          style: TextStyle(fontSize: 18, color: Colors.white),
                         ),
                       ),
                     ),
