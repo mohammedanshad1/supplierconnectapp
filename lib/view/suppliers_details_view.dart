@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:supplierconnectapp/model/cart_model.dart';
 import 'package:supplierconnectapp/viewmodel/cart_viewmodel.dart';
 import 'package:supplierconnectapp/viewmodel/supplier_details_viewmodel.dart';
-
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart'; // Import the package
 
 class SupplierDetailScreen extends StatelessWidget {
   final int supplierId;
@@ -112,12 +112,23 @@ class SupplierDetailScreen extends StatelessWidget {
                               );
                               Provider.of<CartViewModel>(context, listen: false)
                                   .addToCart(cartItem);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text('${product.name} added to cart'),
-                                  duration: const Duration(seconds: 2),
+                              // Show AwesomeSnackbarContent
+                              final snackBar = SnackBar(
+                                elevation: 0,
+                                backgroundColor: Colors.transparent,
+                                behavior: SnackBarBehavior.floating,
+                                content: AwesomeSnackbarContent(
+                                  title: 'Added to Cart!',
+                                  message:
+                                      '${product.name} has been added to your cart.',
+                                  contentType: ContentType.success,
+                                  color: Colors.green.shade900 // Matches AppBar
                                 ),
+                                duration: const Duration(seconds: 2),
                               );
+                              ScaffoldMessenger.of(context)
+                                ..hideCurrentSnackBar()
+                                ..showSnackBar(snackBar);
                             },
                           ),
                         ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supplierconnectapp/service/api_service.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart'; // Import the package
 
 class LoginViewModel extends ChangeNotifier {
   final _apiService = ApiService();
@@ -30,19 +31,43 @@ class LoginViewModel extends ChangeNotifier {
       await prefs.setString('token', loginModel.token);
       print('Stored token: ${loginModel.token}'); // Debug print
 
-      // Show success snackbar
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text('Login Successful!'),
-          backgroundColor: Colors.green,
-          duration: const Duration(seconds: 2),
+      // Show success snackbar using AwesomeSnackbarContent
+      final successSnackBar = SnackBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        behavior: SnackBarBehavior.floating,
+        content: AwesomeSnackbarContent(
+          title: 'Login Successful!',
+          message: 'Welcome to Supplier Connect!',
+          contentType: ContentType.success,
+          color: Colors.green.shade900, // Matches app theme
         ),
+        duration: const Duration(seconds: 2),
       );
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(successSnackBar);
 
       // Navigate to supplier list
       Navigator.pushReplacementNamed(context, '/suppliers');
     } catch (e) {
       _errorMessage = e.toString();
+      // Show error snackbar using AwesomeSnackbarContent
+      final errorSnackBar = SnackBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        behavior: SnackBarBehavior.floating,
+        content: AwesomeSnackbarContent(
+          title: 'Login Failed!',
+          message: _errorMessage,
+          contentType: ContentType.failure,
+          color: Colors.red.shade900, // Matches app theme
+        ),
+        duration: const Duration(seconds: 3),
+      );
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(errorSnackBar);
     } finally {
       _isLoading = false;
       notifyListeners();

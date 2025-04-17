@@ -87,14 +87,14 @@ class LoginScreen extends StatelessWidget {
                           style: TextStyle(fontSize: 18),
                         ),
                       ),
-                if (viewModel.errorMessage.isNotEmpty)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 16),
-                    child: Text(
-                      viewModel.errorMessage,
-                      style: const TextStyle(color: Colors.redAccent),
-                    ),
-                  ),
+                // if (viewModel.errorMessage.isNotEmpty)
+                //   Padding(
+                //     padding: const EdgeInsets.only(top: 16),
+                //     child: Text(
+                //       viewModel.errorMessage,
+                //       style: const TextStyle(color: Colors.redAccent),
+                //     ),
+                //   ),
               ],
             ),
           ),
