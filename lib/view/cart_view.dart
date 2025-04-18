@@ -129,22 +129,23 @@ class CartScreen extends StatelessWidget {
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
-                          viewModel.clearCart();
-                          final snackBar = SnackBar(
-                            elevation: 0,
-                            behavior: SnackBarBehavior.floating,
-                            backgroundColor: Colors.transparent,
-                            content: AwesomeSnackbarContent(
-                              title: 'Cart Cleared',
-                              message:
-                                  'All items have been removed from your cart.',
-                              contentType: ContentType.help,
-                              color: Colors.green.shade900,
-                            ),
-                          );
-                          ScaffoldMessenger.of(context)
-                            ..hideCurrentSnackBar()
-                            ..showSnackBar(snackBar);
+                          Navigator.pop(context);
+                          // viewModel.clearCart();
+                          // final snackBar = SnackBar(
+                          //   elevation: 0,
+                          //   behavior: SnackBarBehavior.floating,
+                          //   backgroundColor: Colors.transparent,
+                          //   content: AwesomeSnackbarContent(
+                          //     title: 'Cart Cleared',
+                          //     message:
+                          //         'All items have been removed from your cart.',
+                          //     contentType: ContentType.help,
+                          //     color: Colors.green.shade900,
+                          //   ),
+                          // );
+                          // ScaffoldMessenger.of(context)
+                          //   ..hideCurrentSnackBar()
+                          //   ..showSnackBar(snackBar);
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.red.shade600,
