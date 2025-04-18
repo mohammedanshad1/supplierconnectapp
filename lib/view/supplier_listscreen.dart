@@ -5,6 +5,7 @@ import 'package:supplierconnectapp/view/cart_view.dart';
 import 'package:supplierconnectapp/view/suppliers_details_view.dart';
 import 'package:supplierconnectapp/viewmodel/supplier_details_viewmodel.dart';
 import 'package:supplierconnectapp/viewmodel/supplier_viewmodel.dart';
+import 'package:animate_do/animate_do.dart'; // Added for animations
 
 class SupplierListScreen extends StatefulWidget {
   const SupplierListScreen({Key? key}) : super(key: key);
@@ -31,10 +32,121 @@ class _SupplierListScreenState extends State<SupplierListScreen> {
   }
 
   Future<void> _logout() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.clear();
-    // Navigate to the login screen or perform any other logout action
-    Navigator.pushReplacementNamed(context, '/');
+    // Show the alert dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          elevation: 8,
+          backgroundColor: Colors.white.withOpacity(0.95),
+          child: FadeIn(
+            duration: const Duration(milliseconds: 300),
+            child: Container(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Title
+                  Text(
+                    'Confirm Logout',
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue.shade900,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  // Message
+                  Text(
+                    'Are you sure you want to log out?',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey.shade800,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 24),
+                  // Buttons in a row
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      // No Button (Red)
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pop(); // Dismiss dialog
+                        },
+                        child: Container(
+                          width: 100,
+                          height: 48,
+                          decoration: BoxDecoration(
+                            color: Colors.red.shade600,
+                            borderRadius: BorderRadius.circular(8),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.red.shade300.withOpacity(0.4),
+                                blurRadius: 8,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: const Center(
+                            child: Text(
+                              'No',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      // Yes Button (Green)
+                      GestureDetector(
+                        onTap: () async {
+                          final prefs = await SharedPreferences.getInstance();
+                          await prefs.clear();
+                          Navigator.of(context).pop(); // Dismiss dialog
+                          Navigator.pushReplacementNamed(context, '/');
+                        },
+                        child: Container(
+                          width: 100,
+                          height: 48,
+                          decoration: BoxDecoration(
+                            color: Colors.green.shade600,
+                            borderRadius: BorderRadius.circular(8),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.green.shade300.withOpacity(0.4),
+                                blurRadius: 8,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: const Center(
+                            child: Text(
+                              'Yes',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 
   void _onItemTapped(int index) {
@@ -235,7 +347,7 @@ class _SupplierListScreenState extends State<SupplierListScreen> {
             currentIndex: _selectedIndex,
             selectedItemColor: Colors.white,
             unselectedItemColor: Colors.white70,
-            backgroundColor: Colors.blue.shade900, // Matches AppBar color
+            backgroundColor: Colors.blue.shade900,
             elevation: 0,
             type: BottomNavigationBarType.fixed,
             selectedLabelStyle: const TextStyle(

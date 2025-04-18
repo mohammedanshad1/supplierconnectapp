@@ -1,6 +1,7 @@
-// File: lib/views/splash_screen.dart
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:animate_do/animate_do.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -34,33 +35,132 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Colors.blue.shade900, Colors.blue.shade300],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Colors.blue.shade900, Colors.blue.shade500],
+            stops: const [0.0, 1.0],
+            tileMode: TileMode.mirror,
           ),
         ),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.business_center,
-                size: 100,
-                color: Colors.white,
-              ),
-              const SizedBox(height: 16),
-              const Text(
-                'Supplier Connect',
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+        child: Stack(
+          children: [
+            // Subtle animated background circles
+            Positioned(
+              top: -50,
+              left: -50,
+              child: AnimatedOpacity(
+                opacity: 0.2,
+                duration: const Duration(seconds: 3),
+                child: Container(
+                  width: 200,
+                  height: 200,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white.withOpacity(0.1),
+                  ),
                 ),
               ),
-              const SizedBox(height: 24),
-              const CircularProgressIndicator(color: Colors.white),
-            ],
-          ),
+            ),
+            Positioned(
+              bottom: -100,
+              right: -100,
+              child: AnimatedOpacity(
+                opacity: 0.2,
+                duration: const Duration(seconds: 3),
+                child: Container(
+                  width: 300,
+                  height: 300,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white.withOpacity(0.1),
+                  ),
+                ),
+              ),
+            ),
+            // Main content
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  FadeInDown(
+                    duration: const Duration(milliseconds: 1200),
+                    child: ElasticIn(
+                      duration: const Duration(milliseconds: 1000),
+                      child: Container(
+                        padding: const EdgeInsets.all(24),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          gradient: LinearGradient(
+                            colors: [
+                              Colors.white.withOpacity(0.3),
+                              Colors.white.withOpacity(0.1),
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.blue.shade900.withOpacity(0.4),
+                              blurRadius: 20,
+                              offset: const Offset(0, 8),
+                            ),
+                          ],
+                        ),
+                        child: const Icon(
+                          Icons.business_center,
+                          size: 120,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  FadeInUp(
+                    duration: const Duration(milliseconds: 1200),
+                    child: Text(
+                      'Supplier Connect',
+                      style: TextStyle(
+                        fontSize: 40,
+                        fontWeight: FontWeight.w900,
+                        color: Colors.white,
+                        letterSpacing: 1.5,
+                        fontFamily: 'Poppins', // Optional: Add custom font
+                        shadows: [
+                          Shadow(
+                            color: Colors.blue.shade900.withOpacity(0.5),
+                            blurRadius: 15,
+                            offset: const Offset(0, 5),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 36),
+                  ZoomIn(
+                    duration: const Duration(milliseconds: 1400),
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white.withOpacity(0.15),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.blue.shade900.withOpacity(0.3),
+                            blurRadius: 10,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: SpinKitFadingCube(
+                        color: Colors.white,
+                        size: 40.0,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
