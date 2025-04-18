@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:supplierconnectapp/view/order_success_Screen.dart';
 import 'package:supplierconnectapp/viewmodel/cart_viewmodel.dart';
 import 'package:animate_do/animate_do.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 
 class CartScreen extends StatelessWidget {
   const CartScreen({Key? key}) : super(key: key);
@@ -94,15 +95,23 @@ class CartScreen extends StatelessWidget {
                                   color: Colors.red.shade600,
                                 ),
                                 onPressed: () {
+                                  String productName = cartItem.productName;
                                   viewModel.removeItem(index);
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                          '${cartItem.productName} removed from cart'),
-                                      duration: const Duration(seconds: 2),
-                                      backgroundColor: Colors.blue.shade900,
+                                  final snackBar = SnackBar(
+                                    elevation: 0,
+                                    behavior: SnackBarBehavior.floating,
+                                    backgroundColor: Colors.transparent,
+                                    content: AwesomeSnackbarContent(
+                                      title: 'Item Removed',
+                                      message:
+                                          '$productName has been removed from your cart.',
+                                      contentType: ContentType.warning,
+                                      color: Colors.green.shade900,
                                     ),
                                   );
+                                  ScaffoldMessenger.of(context)
+                                    ..hideCurrentSnackBar()
+                                    ..showSnackBar(snackBar);
                                 },
                               ),
                             ],
@@ -121,13 +130,21 @@ class CartScreen extends StatelessWidget {
                       child: ElevatedButton(
                         onPressed: () {
                           viewModel.clearCart();
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: const Text('Cart cleared'),
-                              duration: const Duration(seconds: 2),
-                              backgroundColor: Colors.blue.shade900,
+                          final snackBar = SnackBar(
+                            elevation: 0,
+                            behavior: SnackBarBehavior.floating,
+                            backgroundColor: Colors.transparent,
+                            content: AwesomeSnackbarContent(
+                              title: 'Cart Cleared',
+                              message:
+                                  'All items have been removed from your cart.',
+                              contentType: ContentType.help,
+                              color: Colors.green.shade900,
                             ),
                           );
+                          ScaffoldMessenger.of(context)
+                            ..hideCurrentSnackBar()
+                            ..showSnackBar(snackBar);
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.red.shade600,
@@ -157,13 +174,20 @@ class CartScreen extends StatelessWidget {
                               );
                             }
                           } catch (e) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('Failed to place order: $e'),
-                                duration: const Duration(seconds: 2),
-                                backgroundColor: Colors.blue.shade900,
+                            final snackBar = SnackBar(
+                              elevation: 0,
+                              behavior: SnackBarBehavior.floating,
+                              backgroundColor: Colors.transparent,
+                              content: AwesomeSnackbarContent(
+                                title: 'Order Failed',
+                                message: 'Failed to place order: $e',
+                                contentType: ContentType.failure,
+                                color: Colors.red.shade900,
                               ),
                             );
+                            ScaffoldMessenger.of(context)
+                              ..hideCurrentSnackBar()
+                              ..showSnackBar(snackBar);
                           }
                         },
                         style: ElevatedButton.styleFrom(
