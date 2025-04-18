@@ -57,6 +57,11 @@ class CartViewModel extends ChangeNotifier {
     }
   }
 
+  void removeItem(int index) {
+    _cartItems.removeAt(index);
+    notifyListeners();
+  }
+
   void clearCart() {
     _cartItems.clear();
     notifyListeners();

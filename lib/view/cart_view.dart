@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:supplierconnectapp/view/order_success_Screen.dart';
 import 'package:supplierconnectapp/viewmodel/cart_viewmodel.dart';
+import 'package:animate_do/animate_do.dart';
 
 class CartScreen extends StatelessWidget {
   const CartScreen({Key? key}) : super(key: key);
@@ -38,54 +39,74 @@ class CartScreen extends StatelessWidget {
                   itemCount: viewModel.cartItems.length,
                   itemBuilder: (context, index) {
                     final cartItem = viewModel.cartItems[index];
-                    return Card(
-                      elevation: 4,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      margin: const EdgeInsets.symmetric(
-                          vertical: 8, horizontal: 16),
-                      child: ListTile(
-                        contentPadding: const EdgeInsets.all(16),
-                        leading: const Icon(
-                          Icons.shopping_bag,
-                          color: Colors.blue,
-                          size: 32,
+                    return FadeInUp(
+                      duration: const Duration(milliseconds: 300),
+                      child: Card(
+                        elevation: 4,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
                         ),
-                        title: Text(
-                          cartItem.productName,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 18,
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 8, horizontal: 16),
+                        child: ListTile(
+                          contentPadding: const EdgeInsets.all(16),
+                          leading: Icon(
+                            Icons.shopping_bag,
+                            color: Colors.blue.shade900,
+                            size: 32,
                           ),
-                        ),
-                        subtitle: Text(
-                          'Price: \$${cartItem.price.toStringAsFixed(2)}',
-                          style: const TextStyle(
-                            color: Colors.grey,
-                            fontSize: 16,
+                          title: Text(
+                            cartItem.productName,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 18,
+                            ),
                           ),
-                        ),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              icon: const Icon(Icons.remove),
-                              onPressed: () {
-                                viewModel.decreaseQuantity(index);
-                              },
+                          subtitle: Text(
+                            'Price: \$${cartItem.price.toStringAsFixed(2)}',
+                            style: const TextStyle(
+                              color: Colors.grey,
+                              fontSize: 16,
                             ),
-                            Text(
-                              '${cartItem.quantity}',
-                              style: const TextStyle(fontSize: 16),
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.add),
-                              onPressed: () {
-                                viewModel.increaseQuantity(index);
-                              },
-                            ),
-                          ],
+                          ),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.remove),
+                                onPressed: () {
+                                  viewModel.decreaseQuantity(index);
+                                },
+                              ),
+                              Text(
+                                '${cartItem.quantity}',
+                                style: const TextStyle(fontSize: 16),
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.add),
+                                onPressed: () {
+                                  viewModel.increaseQuantity(index);
+                                },
+                              ),
+                              IconButton(
+                                icon: Icon(
+                                  Icons.delete,
+                                  color: Colors.red.shade600,
+                                ),
+                                onPressed: () {
+                                  viewModel.removeItem(index);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                          '${cartItem.productName} removed from cart'),
+                                      duration: const Duration(seconds: 2),
+                                      backgroundColor: Colors.blue.shade900,
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     );
@@ -101,14 +122,15 @@ class CartScreen extends StatelessWidget {
                         onPressed: () {
                           viewModel.clearCart();
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Cart cleared'),
-                              duration: Duration(seconds: 2),
+                            SnackBar(
+                              content: const Text('Cart cleared'),
+                              duration: const Duration(seconds: 2),
+                              backgroundColor: Colors.blue.shade900,
                             ),
                           );
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red,
+                          backgroundColor: Colors.red.shade600,
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
@@ -139,12 +161,13 @@ class CartScreen extends StatelessWidget {
                               SnackBar(
                                 content: Text('Failed to place order: $e'),
                                 duration: const Duration(seconds: 2),
+                                backgroundColor: Colors.blue.shade900,
                               ),
                             );
                           }
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green,
+                          backgroundColor: Colors.green.shade600,
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
